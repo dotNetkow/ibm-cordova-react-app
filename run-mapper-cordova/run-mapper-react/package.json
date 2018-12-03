@@ -3,11 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "google-maps-react": "^2.0.2",
+    "node-uuid": "^1.4.8",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
-    "react-scripts": "2.1.1"
+    "react-hot-loader": "^4.3.12",
+    "react-redux": "^5.1.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.1",
+    "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
+    "prebuild": "rm -rf ../www/*",
+    "postbuild": "mv build/* ../www && sed -i \"\" 's/\\\"\\//\\\"/g' ../www/index.html",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
