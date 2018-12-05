@@ -20,7 +20,7 @@ class Home extends Component<Props> {
   render() {
     return (
       <div>
-        <h1>Run Lover</h1>
+        <h1>All Runs</h1>
         <ul>
           { this.props.runList.map(item => {
             const duration = differenceInSeconds(item.startDateTime, item.endDateTime);

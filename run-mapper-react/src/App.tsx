@@ -22,6 +22,7 @@ class App extends Component<{}, State> {
     this.addRun = this.addRun.bind(this);
     this.setSelectedRun = this.setSelectedRun.bind(this);
     this.setTrackRun = this.setTrackRun.bind(this);
+    this.goBackHome = this.goBackHome.bind(this);
   }
 
   addRun(partialRun: Run) {
@@ -57,6 +58,15 @@ class App extends Component<{}, State> {
     });
   }
 
+  goBackHome() {
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        page: 'home'
+      }
+    })
+  }
+
   render() {
     const renderSelectedPage = (pageName: string) => {
       switch (pageName) {
@@ -71,6 +81,12 @@ class App extends Component<{}, State> {
 
     return (
       <div>
+        <header>
+          { this.state.page !== 'home' ?
+            <button onClick={this.goBackHome}>&#60; Home</button> :
+            null }
+          React Run Mapper
+        </header>
         { renderSelectedPage(this.state.page) }
       </div>
     );
