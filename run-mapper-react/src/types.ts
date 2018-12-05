@@ -1,9 +1,9 @@
 export type Coordinate = [number, number];
 
 export type Run = {
-  id: number;
+  id: string;
   startDateTime: Date;
   endDateTime: Date;
-  startCoordinate: Coordinate;
-  endCoordinate: Coordinate;
+  coordinateList: Coordinate[];
+  distance: number;
 }

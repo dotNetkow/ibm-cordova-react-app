@@ -1,11 +1,12 @@
 import React, { Component, MouseEvent } from 'react';
 import { Run } from '../types';
-import { calcHaversineDistance } from '../utils';
 import { format } from 'date-fns';
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 
 type Props = {
   runList: Run[]
+  setSelectedRun: (selectedRunId: string) => void
+  setTrackRun: () => void;
 }
 
 class Home extends Component<Props> {
@@ -14,7 +15,7 @@ class Home extends Component<Props> {
     this.onTrackClick = this.onTrackClick.bind(this);
   }
   onTrackClick(e: MouseEvent) {
-
+    this.props.setTrackRun();
   }
   render() {
     return (
@@ -23,14 +24,14 @@ class Home extends Component<Props> {
         <ul>
           { this.props.runList.map(item => {
             const duration = differenceInSeconds(item.startDateTime, item.endDateTime);
-            const distance = calcHaversineDistance(item.startCoordinate, item.endCoordinate);
             return (
               <li>
                 {format(item.startDateTime, 'dd/MM/yyyy')}<br/>
                 {format(duration, 'mm:ss:SSS')}<br/>
-                {distance} m
+                {item.distance} m
               </li>
-          ))}
+            );
+          }) }
         </ul>
         <button onClick={this.onTrackClick}>Track Run</button>
       </div>

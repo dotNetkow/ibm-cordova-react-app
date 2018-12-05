@@ -11,8 +11,8 @@ type Props = {
 type State = {
   startDateTime: Date | null;
   endDateTime: Date | null;
-  startCoordinate: Coordinate | null;
-  endCoordinate: Coordinate| null;
+  coordinateList: Coordinate[];
+  distance: number | null
 }
 
 class Home extends Component<Props, State> {
@@ -22,8 +22,8 @@ class Home extends Component<Props, State> {
     this.state = {
       startDateTime: null,
       endDateTime: null,
-      startCoordinate: null,
-      endCoordinate: null
+      coordinateList: [],
+      distance: null
     }
 
     this.startTracking = this.startTracking.bind(this);
@@ -38,12 +38,13 @@ class Home extends Component<Props, State> {
 
   }
   saveRun() {
-    if (this.state.startDateTime && this.state.endDateTime && this.state.startCoordinate && this.state.endCoordinate) {
+    if (this.state.startDateTime && this.state.endDateTime && this.state.distance) {
       this.props.addRun({
+        id: 'new',
         startDateTime: this.state.startDateTime,
         endDateTime: this.state.endDateTime,
-        startCoordinate: this.state.startCoordinate,
-        endCoordinate: this.state.endCoordinate,
+        coordinateList: this.state.coordinateList,
+        distance: this.state.distance
       });
     }
   }
@@ -54,9 +55,6 @@ class Home extends Component<Props, State> {
     const duration = (this.state.startDateTime && this.state.endDateTime) ?
         differenceInSeconds(this.state.startDateTime, this.state.endDateTime) :
         0;
-    const distance = (this.state.startCoordinate && this.state.endCoordinate) ?
-        calcHaversineDistance(this.state.startCoordinate, this.state.endCoordinate) :
-        0;
 
     return (
       <div>
@@ -65,7 +63,7 @@ class Home extends Component<Props, State> {
           <dl>
             <dt>
               {format(duration, 'mm:ss:SSS')}<br/>
-              {distance} m
+              {this.state.distance} m
             </dt>
           </dl>
           <div>

@@ -7,7 +7,7 @@ import differenceInSeconds from 'date-fns/difference_in_seconds'
 
 type Props = {
   runList: Run[],
-  selectedRunId: number
+  selectedRunId: string
 }
 
 class Home extends Component<Props> {
@@ -17,7 +17,6 @@ class Home extends Component<Props> {
       return null;
     }
     const duration = differenceInSeconds(run.startDateTime, run.endDateTime)
-    const distance = calcHaversineDistance(run.startCoordinate, run.endCoordinate);
 
     return (
       <div>
@@ -26,10 +25,10 @@ class Home extends Component<Props> {
           <dl>
             <dt>
               Duration: {format(duration, 'mm:ss:SSS')}<br/>
-              Distance: {distance} m
+              Distance: {run.distance} m
             </dt>
             <dd>
-              {format(this.props.run.startDateTime, 'dd/MM/yyyy')}
+              {format(run.startDateTime, 'dd/MM/yyyy')}
             </dd>
           </dl>
         </div>

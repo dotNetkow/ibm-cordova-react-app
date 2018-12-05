@@ -3,13 +3,14 @@ import Home from './pages/Home';
 import Detail from './pages/Detail';
 import Track from './pages/Track';
 import { Run } from './types';
+import { getUniqueId } from './utils';
 
 type State = {
   page: 'home' | 'track' | 'detail';
-  selectedRunId: number | null;
+  selectedRunId: string | null;
   runList: Run[]
 }
-class App extends Component<null, State> {
+class App extends Component<{}, State> {
   constructor(props: any) {
     super(props);
 
@@ -19,22 +20,58 @@ class App extends Component<null, State> {
       runList: [],
     }
     this.addRun = this.addRun.bind(this);
+    this.setSelectedRun = this.setSelectedRun.bind(this);
+    this.setTrackRun = this.setTrackRun.bind(this);
   }
-  addRun(partialRun: Run) {
-    this.setState(() => {
 
-      this.runList.push({
-        ...partialRun,
-        id: this.runList.length + 1,
-      });
+  addRun(partialRun: Run) {
+    const newRun = {
+      ...partialRun,
+      id: getUniqueId(),
+    };
+
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        runList: prevState.runList.concat(newRun)
+      };
     });
   }
+
+  setSelectedRun(selectedRunId: string) {
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        selectedRunId,
+        page: 'detail'
+      } 
+    });
+  }
+
+  setTrackRun() {
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        page: 'track'
+      } 
+    });
+  }
+
   render() {
+    const renderSelectedPage = (pageName: string) => {
+      switch (pageName) {
+      case 'track':
+        return <Track addRun={this.addRun} />;
+      case 'detail':
+        return <Detail runList={this.state.runList} selectedRunId={this.state.selectedRunId || ''} />
+      default:
+        return <Home runList={this.state.runList} setSelectedRun={this.setSelectedRun} setTrackRun={this.setTrackRun} />;
+      }
+    }
+
     return (
       <div>
-        {(this.state.page === 'home') ? <Home runList={this.state.runList}/> : null}
-        {(this.state.page === 'track') ? <Track addRun={this.addRun}/> : null}
-        {(this.state.page === 'detail' && this.state.selectedRunId) ? <Detail runList={this.state.runList} selectedRunId={this.state.selectedRunId} /> : null}
+        { renderSelectedPage(this.state.page) }
       </div>
     );
   }
