@@ -18,8 +18,8 @@ type State = {
 class Home extends Component<Props, State> {
   geolocator: any;
   geolocation: any;
-  map: any;
-  mapRef: React.Ref<HTMLDivElement>;
+  map?: google.maps.Map;
+  mapRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: any) {
     super(props);
@@ -40,7 +40,7 @@ class Home extends Component<Props, State> {
   }
   startTracking() {
     this.geolocator = navigator.geolocation.watchPosition((data: Position) => {
-      if (data.coords == null) {
+      if (data.coords == null || this.map == null) {
         return;
       }
 
@@ -51,25 +51,37 @@ class Home extends Component<Props, State> {
         if (lastCoordinate) {
           distance += calcHaversineDistance(lastCoordinate, currentCoordinate);
         }
+        const startTime = new Date();
+
         return {
           ...prevState,
           distance,
-          coordinateList: prevState.coordinateList.concat([currentCoordinate])
+          coordinateList: prevState.coordinateList.concat([currentCoordinate]),
+          startDateTime: startTime
         }
       });
 
-      this.map.moveCamera({ zoom: 15, target: {
-        lat: data.coords.latitude,
-        lng: data.coords.longitude
-      }});
-
+      var latlng = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
+      this.map.setCenter(latlng);
 
     }, () => {}, { enableHighAccuracy: true });
   }
   componentDidMount() {
-    this.map = (window as any).plugin.google.maps.Map.getMap(this.mapRef);
+    this.map = new google.maps.Map(this.mapRef.current, {
+      center: {lat: -34.397, lng: 150.644},
+      zoom: 8
+    });
   }
   stopTracking() {
+    const endTime = new Date();
+
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        endDateTime: endTime
+      };
+    })
+
     navigator.geolocation.clearWatch(this.geolocator);
   }
   saveRun() {
@@ -95,7 +107,7 @@ class Home extends Component<Props, State> {
     return (
       <div>
         <h1>Track Run</h1>
-        <div ref={this.mapRef} style={{ height: '100%' }}></div>
+        <div ref={this.mapRef} style={{ height: '600px', width: '300px' }}></div>
         <footer>
           <dl>
             <dt>
