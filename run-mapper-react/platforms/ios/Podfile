@@ -2,5 +2,5 @@
 platform :ios, '8.0'
 target 'HelloWorld' do
 	project 'HelloWorld.xcodeproj'
-	pod 'GoogleMaps', '~> 2.7.0'
+
 end
