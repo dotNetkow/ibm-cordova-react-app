@@ -23,8 +23,6 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <engine name="ios" spec="~4.5.5" />
-    <engine name="android" spec="~7.1.4" />
     <plugin name="cordova-plugin-googlemaps" spec="^2.4.6">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyAmAwkv8-x2I--ne-NtA3C_4E_-xLCsFJs" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyAmAwkv8-x2I--ne-NtA3C_4E_-xLCsFJs" />
@@ -34,4 +32,6 @@
         <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="This app wants to get your location always, even this app runs in background." />
     </plugin>
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
+    <engine name="ios" spec="^4.5.5" />
+    <engine name="android" spec="^7.1.4" />
 </widget>
