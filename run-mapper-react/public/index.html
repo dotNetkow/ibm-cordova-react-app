@@ -2,7 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' data: gap:
+            https://ssl.gstatic.com;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval'
+            https://*.gstatic.com https://*.googleapis.com;
+        style-src 'self' 'unsafe-inline';
+        media-src *">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -37,7 +43,7 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAmAwkv8-x2I--ne-NtA3C_4E_-xLCsFJs"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmAwkv8-x2I--ne-NtA3C_4E_-xLCsFJs"
     async defer></script>
     <script type="text/javascript" src="cordova.js"></script>
   </body>

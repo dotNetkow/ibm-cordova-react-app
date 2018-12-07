@@ -33,7 +33,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build www",
+    "build": "react-scripts build && rm -Rf www && mv build www",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
