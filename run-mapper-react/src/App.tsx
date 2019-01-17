@@ -15,13 +15,13 @@ class App extends Component<{}, State> {
   constructor(props: any) {
     super(props);
 
-    this.retrieveRunHistory();
-
     this.state = {
       page: 'home',
       selectedRunId: null,
       runList: [],
     }
+    this.retrieveRunHistory();
+
     this.addRun = this.addRun.bind(this);
     this.setSelectedRun = this.setSelectedRun.bind(this);
     this.setTrackRun = this.setTrackRun.bind(this);
@@ -36,16 +36,17 @@ class App extends Component<{}, State> {
     }
 
     let database = new PouchDB("react-cordova");
+
     database.allDocs<Run>({ include_docs: true }).then((result) => {
-      
-      if (result.rows.length != this.state.runList.length) {
-        for(let i = 0; i < result.rows.length; i++) {
-          const newRun : Run = {
-            ...result.rows[i].doc
-          };
-          this.state.runList.push(newRun);
-        }
-      }
+      const runList: Run[] = result.rows
+        .filter(item => item.doc != null)
+        .map((item) => {
+          return item.doc!;
+        });
+
+      this.setState(() => ({
+        runList
+      }))
     });
   }
 
@@ -69,7 +70,7 @@ class App extends Component<{}, State> {
         ...prevState,
         selectedRunId,
         page: 'detail'
-      } 
+      }
     });
   }
 
@@ -78,7 +79,7 @@ class App extends Component<{}, State> {
       return {
         ...prevState,
         page: 'track'
-      } 
+      }
     });
   }
 
