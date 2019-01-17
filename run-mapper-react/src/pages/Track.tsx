@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Coordinate, Run } from '../types';
 import { calcHaversineDistance } from '../utils';
 import { format } from 'date-fns';
-import differenceInSeconds from 'date-fns/difference_in_seconds'
+import differenceInSeconds from 'date-fns/difference_in_seconds';
+import PouchDB from 'pouchdb';
 
 type Props = {
   addRun: (r: Run) => void
@@ -86,12 +87,21 @@ class Home extends Component<Props, State> {
   }
   saveRun() {
     if (this.state.startDateTime && this.state.endDateTime && this.state.distance) {
-      this.props.addRun({
+      let runData = {
         id: 'new',
         startDateTime: this.state.startDateTime,
         endDateTime: this.state.endDateTime,
         coordinateList: this.state.coordinateList,
         distance: this.state.distance
+      };
+      let localDatabase = new PouchDB("cordova-react");
+      let DB_URL = "YOUR CLOUDANT URL";
+      let DB_NAME = "cordova-react";  // or, your database name
+
+      localDatabase.post(runData).then(() => {
+        localDatabase.replicate.to(DB_URL + DB_NAME);
+  
+        this.props.addRun(runData);
       });
     }
   }

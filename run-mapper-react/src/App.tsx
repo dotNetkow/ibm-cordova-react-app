@@ -4,6 +4,7 @@ import Detail from './pages/Detail';
 import Track from './pages/Track';
 import { Run } from './types';
 import { getUniqueId } from './utils';
+import PouchDB from 'pouchdb';
 
 type State = {
   page: 'home' | 'track' | 'detail';
@@ -14,6 +15,8 @@ class App extends Component<{}, State> {
   constructor(props: any) {
     super(props);
 
+    this.retrieveRunHistory();
+
     this.state = {
       page: 'home',
       selectedRunId: null,
@@ -23,6 +26,27 @@ class App extends Component<{}, State> {
     this.setSelectedRun = this.setSelectedRun.bind(this);
     this.setTrackRun = this.setTrackRun.bind(this);
     this.goBackHome = this.goBackHome.bind(this);
+  }
+
+  retrieveRunHistory() {
+    this.state = {
+      page: 'home',
+      selectedRunId: null,
+      runList: [],
+    }
+
+    let database = new PouchDB("react-cordova");
+    database.allDocs<Run>({ include_docs: true }).then((result) => {
+      
+      if (result.rows.length != this.state.runList.length) {
+        for(let i = 0; i < result.rows.length; i++) {
+          const newRun : Run = {
+            ...result.rows[i].doc
+          };
+          this.state.runList.push(newRun);
+        }
+      }
+    });
   }
 
   addRun(partialRun: Run) {
